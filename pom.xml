@@ -71,7 +71,7 @@
             <properties>
                 <cas-mock-version>1.0-Alpha-2</cas-mock-version>
                 <tomcat.httpsPort>8443</tomcat.httpsPort>
-                <eurekaclinical-i2b2-integration-service-version>1.0-Alpha-9</eurekaclinical-i2b2-integration-service-version>
+                <eurekaclinical-i2b2-integration-service-version>1.0-Alpha-11</eurekaclinical-i2b2-integration-service-version>
             </properties>
             <build>
                 <plugins>
