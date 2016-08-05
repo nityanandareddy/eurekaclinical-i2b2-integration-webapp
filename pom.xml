@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>eurekaclinical-i2b2-integration-webapp</artifactId>
     <packaging>war</packaging>
-    <version>1.0-Alpha-5-SNAPSHOT</version>
+    <version>1.0-Alpha-1-SNAPSHOT</version>
     <name>Eureka! Clinical I2b2 Integration Webapp</name>
     <description>Provides a proxy for accessing i2b2 integration services.
     </description>
