@@ -19,10 +19,11 @@ package org.eurekaclinical.i2b2.integration.webapp.client;
  * limitations under the License.
  * #L%
  */
-
-import javax.inject.Inject;
+import com.google.inject.Inject;
 import org.eurekaclinical.common.comm.clients.Route;
 import org.eurekaclinical.common.comm.clients.RouterTable;
+import org.eurekaclinical.i2b2.integration.webapp.props.WebappProperties;
+import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementClient;
 
 /**
  *
@@ -31,15 +32,32 @@ import org.eurekaclinical.common.comm.clients.RouterTable;
 public class ServiceClientRouterTable implements RouterTable {
 
     private final ServiceClient client;
+    private final EurekaClinicalUserAgreementClient userAgreementClient;
 
     @Inject
-    public ServiceClientRouterTable(ServiceClient inClient) {
+    public ServiceClientRouterTable(ServiceClient inClient, WebappProperties inProperties) {
         this.client = inClient;
+        String userAgreementServiceUrl = inProperties.getUserAgreementServiceUrl();
+        if (userAgreementServiceUrl != null) {
+            this.userAgreementClient = new EurekaClinicalUserAgreementClient(userAgreementServiceUrl);
+        } else {
+            this.userAgreementClient = null;
+        }
     }
-    
+
     @Override
     public Route[] load() {
-        return new Route[]{new Route("/", "/api/protected/", this.client)};
+        if (this.userAgreementClient != null) {
+            return new Route[]{
+                new Route("/present", "/eurekaclinical-user-agreement-webapp/protected/present", this.userAgreementClient),
+                new Route("/useragreementstatuses", "/eurekaclinical-user-agreement-webapp/proxy-resource/useragreementstatuses", this.userAgreementClient),
+                new Route("/", "/api/protected/", this.client)
+            };
+        } else {
+            return new Route[]{
+                new Route("/", "/api/protected/", this.client)
+            };
+        }
     }
-    
+
 }

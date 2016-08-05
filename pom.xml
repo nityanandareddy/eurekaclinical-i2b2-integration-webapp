@@ -32,6 +32,7 @@
     
     <properties>
         <ec-i2b2-integration-client-version>1.0-Alpha-2</ec-i2b2-integration-client-version>
+        <ec-user-agreement-client-version>1.0-Alpha-1</ec-user-agreement-client-version>
     </properties>
     
     <build>
@@ -57,6 +58,11 @@
             <groupId>org.eurekaclinical</groupId>
             <artifactId>eurekaclinical-i2b2-integration-client</artifactId>
             <version>${ec-i2b2-integration-client-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eurekaclinical</groupId>
+            <artifactId>eurekaclinical-user-agreement-client</artifactId>
+            <version>${ec-user-agreement-client-version}</version>
         </dependency>
     </dependencies>
     <profiles>
