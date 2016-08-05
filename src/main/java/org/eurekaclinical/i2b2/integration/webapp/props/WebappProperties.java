@@ -42,7 +42,7 @@ public class WebappProperties extends CasEurekaClinicalProperties {
     }
     
     public String getUserAgreementServiceUrl() {
-        return getValue("eurekaclinical.useragreementwebapp.url");
+        return getValue("eurekaclinical.useragreementservice.url");
     }
     
 }

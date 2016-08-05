@@ -49,8 +49,7 @@ public class ServiceClientRouterTable implements RouterTable {
     public Route[] load() {
         if (this.userAgreementClient != null) {
             return new Route[]{
-                new Route("/present", "/eurekaclinical-user-agreement-webapp/protected/present", this.userAgreementClient),
-                new Route("/useragreementstatuses", "/eurekaclinical-user-agreement-webapp/proxy-resource/useragreementstatuses", this.userAgreementClient),
+                new Route("/useragreementstatuses", "/api/protected/useragreementstatuses", this.userAgreementClient),
                 new Route("/", "/api/protected/", this.client)
             };
         } else {
