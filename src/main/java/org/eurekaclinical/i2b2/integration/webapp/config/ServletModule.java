@@ -23,6 +23,7 @@ package org.eurekaclinical.i2b2.integration.webapp.config;
 import java.util.HashMap;
 import java.util.Map;
 import org.eurekaclinical.common.config.AbstractServletModule;
+import org.eurekaclinical.common.servlet.DestroySessionServlet;
 import org.eurekaclinical.common.servlet.LogoutServlet;
 import org.eurekaclinical.common.servlet.ProxyServlet;
 import org.eurekaclinical.i2b2.integration.webapp.props.WebappProperties;
@@ -55,6 +56,7 @@ public class ServletModule extends AbstractServletModule {
         serve("/proxy-resource/*").with(ProxyServlet.class);
         serve("/protected/login").with(LoginServlet.class);
         serve("/logout").with(LogoutServlet.class);
+        serve("/destroy-session").with(DestroySessionServlet.class);
     }
 
     @Override
