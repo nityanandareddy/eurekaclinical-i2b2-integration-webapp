@@ -25,9 +25,9 @@ import java.util.Map;
 import org.eurekaclinical.common.config.AbstractServletModule;
 import org.eurekaclinical.common.servlet.DestroySessionServlet;
 import org.eurekaclinical.common.servlet.LogoutServlet;
+import org.eurekaclinical.common.servlet.PostMessageLoginServlet;
 import org.eurekaclinical.common.servlet.ProxyServlet;
 import org.eurekaclinical.i2b2.integration.webapp.props.WebappProperties;
-import org.eurekaclinical.i2b2.integration.webapp.servlet.LoginServlet;
 
 /**
  * A Guice configuration module for setting up the web infrastructure and
@@ -42,19 +42,17 @@ public class ServletModule extends AbstractServletModule {
 
     private static final String CONTAINER_PROTECTED_PATH = "/protected/*";
     
-    private static final String LOGOUT_PATH = "/logout";
-
     private final WebappProperties properties;
 
     public ServletModule(WebappProperties inProperties) {
-        super(inProperties, CONTAINER_PATH, CONTAINER_PROTECTED_PATH, LOGOUT_PATH);
+        super(inProperties, CONTAINER_PATH, CONTAINER_PROTECTED_PATH);
         this.properties = inProperties;
     }
     
     @Override
     protected void setupServlets() {
         serve("/proxy-resource/*").with(ProxyServlet.class);
-        serve("/protected/login").with(LoginServlet.class);
+        serve("/protected/get-session").with(PostMessageLoginServlet.class);
         serve("/logout").with(LogoutServlet.class);
         serve("/destroy-session").with(DestroySessionServlet.class);
     }

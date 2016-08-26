@@ -19,7 +19,6 @@ package org.eurekaclinical.i2b2.integration.webapp.props;
  * limitations under the License.
  * #L%
  */
-
 import org.eurekaclinical.standardapis.props.CasEurekaClinicalProperties;
 
 /**
@@ -31,7 +30,7 @@ public class WebappProperties extends CasEurekaClinicalProperties {
     public WebappProperties() {
         super("/etc/ec-i2b2-integration");
     }
-    
+
     @Override
     public String getProxyCallbackServer() {
         return getValue("eurekaclinical.i2b2integrationwebapp.callbackserver");
@@ -40,9 +39,13 @@ public class WebappProperties extends CasEurekaClinicalProperties {
     public String getServiceUrl() {
         return getValue("eurekaclinical.i2b2integrationservice.url");
     }
-    
+
     public String getUserAgreementServiceUrl() {
         return getValue("eurekaclinical.useragreementservice.url");
     }
-    
+
+    @Override
+    public String getUrl() {
+        return this.getValue("eurekaclinical.i2b2integrationwebapp");
+    }
 }
