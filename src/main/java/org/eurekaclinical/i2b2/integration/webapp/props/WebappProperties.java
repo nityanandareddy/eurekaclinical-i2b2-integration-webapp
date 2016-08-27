@@ -46,6 +46,6 @@ public class WebappProperties extends CasEurekaClinicalProperties {
 
     @Override
     public String getUrl() {
-        return this.getValue("eurekaclinical.i2b2integrationwebapp");
+        return this.getValue("eurekaclinical.i2b2integrationwebapp.url");
     }
 }
