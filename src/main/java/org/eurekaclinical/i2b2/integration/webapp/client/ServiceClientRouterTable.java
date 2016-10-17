@@ -23,7 +23,7 @@ import com.google.inject.Inject;
 import org.eurekaclinical.common.comm.clients.Route;
 import org.eurekaclinical.common.comm.clients.RouterTable;
 import org.eurekaclinical.i2b2.integration.webapp.props.WebappProperties;
-import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementClient;
+import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementProxyClient;
 
 /**
  *
@@ -32,14 +32,14 @@ import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementClient
 public class ServiceClientRouterTable implements RouterTable {
 
     private final ServiceClient client;
-    private final EurekaClinicalUserAgreementClient userAgreementClient;
+    private final EurekaClinicalUserAgreementProxyClient userAgreementClient;
 
     @Inject
     public ServiceClientRouterTable(ServiceClient inClient, WebappProperties inProperties) {
         this.client = inClient;
         String userAgreementServiceUrl = inProperties.getUserAgreementServiceUrl();
         if (userAgreementServiceUrl != null) {
-            this.userAgreementClient = new EurekaClinicalUserAgreementClient(userAgreementServiceUrl);
+            this.userAgreementClient = new EurekaClinicalUserAgreementProxyClient(userAgreementServiceUrl);
         } else {
             this.userAgreementClient = null;
         }
