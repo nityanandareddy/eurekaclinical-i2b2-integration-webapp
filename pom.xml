@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>eurekaclinical-i2b2-integration-webapp</artifactId>
     <packaging>war</packaging>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>2.0-Alpha-1-SNAPSHOT</version>
     <name>Eureka! Clinical I2b2 Integration Webapp</name>
     <description>Provides a proxy for accessing i2b2 integration services.
     </description>
@@ -71,7 +71,7 @@
             <properties>
                 <cas-mock-version>1.0</cas-mock-version>
                 <tomcat.httpsPort>8443</tomcat.httpsPort>
-                <eurekaclinical-i2b2-integration-service-version>1.0</eurekaclinical-i2b2-integration-service-version>
+                <eurekaclinical-i2b2-integration-service-version>1.0-Alpha-2</eurekaclinical-i2b2-integration-service-version>
             </properties>
             <build>
                 <plugins>
@@ -196,7 +196,7 @@
                                 </webapp>
                                 <webapp>
                                     <groupId>org.eurekaclinical</groupId>
-                                    <artifactId>i2b2-eureka-service</artifactId>
+                                    <artifactId>eurekaclinical-i2b2-integration-service</artifactId>
                                     <version>${eurekaclinical-i2b2-integration-service-version}</version>
                                     <type>war</type>
                                     <asWebapp>true</asWebapp>
@@ -220,7 +220,7 @@
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>org.eurekaclinical</groupId>
-                                            <artifactId>i2b2-eureka-service</artifactId>
+                                            <artifactId>eurekaclinical-i2b2-integration-service</artifactId>
                                             <version>${eurekaclinical-i2b2-integration-service-version}</version>
                                             <type>war</type>
                                         </artifactItem>
