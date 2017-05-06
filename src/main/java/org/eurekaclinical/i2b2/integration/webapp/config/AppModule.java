@@ -19,12 +19,13 @@ package org.eurekaclinical.i2b2.integration.webapp.config;
  * limitations under the License.
  * #L%
  */
-
 import com.google.inject.AbstractModule;
 import org.eurekaclinical.i2b2.integration.webapp.client.ServiceClientRouterTable;
 import org.eurekaclinical.common.comm.clients.RouterTable;
+import org.eurekaclinical.i2b2.integration.client.EurekaClinicalI2b2IntegrationProxyClient;
 import org.eurekaclinical.standardapis.props.CasEurekaClinicalProperties;
 import org.eurekaclinical.i2b2.integration.webapp.props.WebappProperties;
+import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementProxyClient;
 
 /**
  * @author Andrew Post
@@ -32,14 +33,22 @@ import org.eurekaclinical.i2b2.integration.webapp.props.WebappProperties;
 public class AppModule extends AbstractModule {
 
     private final WebappProperties properties;
-    
-    public AppModule(WebappProperties inProperties) {
+    private final EurekaClinicalI2b2IntegrationProxyClient i2b2IntegrationClient;
+    private final EurekaClinicalUserAgreementProxyClient userAgreementClient;
+
+    public AppModule(WebappProperties inProperties, EurekaClinicalI2b2IntegrationProxyClient inI2b2IntegrationClient, EurekaClinicalUserAgreementProxyClient inUserAgreementClient) {
         this.properties = inProperties;
+        this.i2b2IntegrationClient = inI2b2IntegrationClient;
+        this.userAgreementClient = inUserAgreementClient;
     }
 
     @Override
     protected void configure() {
         bind(RouterTable.class).to(ServiceClientRouterTable.class);
         bind(CasEurekaClinicalProperties.class).toInstance(this.properties);
+        bind(EurekaClinicalI2b2IntegrationProxyClient.class).toInstance(this.i2b2IntegrationClient);
+        if (this.userAgreementClient != null) {
+            bind(EurekaClinicalUserAgreementProxyClient.class).toInstance(this.userAgreementClient);
+        }
     }
 }

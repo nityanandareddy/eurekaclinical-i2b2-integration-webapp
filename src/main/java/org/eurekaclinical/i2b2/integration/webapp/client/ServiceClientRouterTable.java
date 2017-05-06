@@ -22,6 +22,7 @@ package org.eurekaclinical.i2b2.integration.webapp.client;
 import com.google.inject.Inject;
 import org.eurekaclinical.common.comm.clients.Route;
 import org.eurekaclinical.common.comm.clients.RouterTable;
+import org.eurekaclinical.i2b2.integration.client.EurekaClinicalI2b2IntegrationProxyClient;
 import org.eurekaclinical.i2b2.integration.webapp.props.WebappProperties;
 import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementProxyClient;
 
@@ -31,18 +32,14 @@ import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementProxyC
  */
 public class ServiceClientRouterTable implements RouterTable {
 
-    private final ServiceClient client;
-    private final EurekaClinicalUserAgreementProxyClient userAgreementClient;
+    private final EurekaClinicalI2b2IntegrationProxyClient i2b2IntegrationClient;
+    
+    @Inject(optional=true)
+    private EurekaClinicalUserAgreementProxyClient userAgreementClient;
 
     @Inject
-    public ServiceClientRouterTable(ServiceClient inClient, WebappProperties inProperties) {
-        this.client = inClient;
-        String userAgreementServiceUrl = inProperties.getUserAgreementServiceUrl();
-        if (userAgreementServiceUrl != null) {
-            this.userAgreementClient = new EurekaClinicalUserAgreementProxyClient(userAgreementServiceUrl);
-        } else {
-            this.userAgreementClient = null;
-        }
+    public ServiceClientRouterTable(EurekaClinicalI2b2IntegrationProxyClient inI2b2IntegrationClient, WebappProperties inProperties) {
+        this.i2b2IntegrationClient = inI2b2IntegrationClient;
     }
 
     @Override
@@ -50,11 +47,11 @@ public class ServiceClientRouterTable implements RouterTable {
         if (this.userAgreementClient != null) {
             return new Route[]{
                 new Route("/useragreementstatuses", "/api/protected/useragreementstatuses", this.userAgreementClient),
-                new Route("/", "/api/protected/", this.client)
+                new Route("/", "/api/protected/", this.i2b2IntegrationClient)
             };
         } else {
             return new Route[]{
-                new Route("/", "/api/protected/", this.client)
+                new Route("/", "/api/protected/", this.i2b2IntegrationClient)
             };
         }
     }

@@ -19,13 +19,15 @@ package org.eurekaclinical.i2b2.integration.webapp.config;
  * limitations under the License.
  * #L%
  */
-
 import org.eurekaclinical.common.config.InjectorSupport;
 import com.google.inject.Injector;
 
 import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
+import javax.servlet.ServletContextEvent;
+import org.eurekaclinical.i2b2.integration.client.EurekaClinicalI2b2IntegrationProxyClient;
 import org.eurekaclinical.i2b2.integration.webapp.props.WebappProperties;
+import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementProxyClient;
 
 /**
  * Loaded up on application initialization, sets up the application with Guice
@@ -37,7 +39,20 @@ import org.eurekaclinical.i2b2.integration.webapp.props.WebappProperties;
 public class ContextListener extends GuiceServletContextListener {
 
     private final WebappProperties properties = new WebappProperties();
+    private final EurekaClinicalI2b2IntegrationProxyClient i2b2IntegrationClient
+            = new EurekaClinicalI2b2IntegrationProxyClient(this.properties.getServiceUrl());
+    private final EurekaClinicalUserAgreementProxyClient userAgreementClient;
     private InjectorSupport injectorSupport;
+
+    public ContextListener() {
+        String userAgreementServiceUrl = this.properties.getUserAgreementServiceUrl();
+        if (userAgreementServiceUrl != null) {
+            this.userAgreementClient
+                    = new EurekaClinicalUserAgreementProxyClient(this.properties.getUserAgreementServiceUrl());
+        } else {
+            this.userAgreementClient = null;
+        }
+    }
 
     @Override
     protected Injector getInjector() {
@@ -48,12 +63,19 @@ public class ContextListener extends GuiceServletContextListener {
         if (this.injectorSupport == null) {
             this.injectorSupport = new InjectorSupport(
                     new Module[]{
-                        new AppModule(this.properties),
-                        new ServletModule(this.properties),
-                    },
+                        new AppModule(this.properties, this.i2b2IntegrationClient, this.userAgreementClient),
+                        new ServletModule(this.properties),},
                     this.properties);
         }
         return this.injectorSupport.getInjector();
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {
+        this.i2b2IntegrationClient.close();
+        if (this.userAgreementClient != null) {
+            this.userAgreementClient.close();
+        }
     }
 
 }
