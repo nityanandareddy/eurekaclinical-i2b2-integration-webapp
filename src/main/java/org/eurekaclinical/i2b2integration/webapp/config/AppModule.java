@@ -22,7 +22,7 @@ package org.eurekaclinical.i2b2integration.webapp.config;
 import com.google.inject.AbstractModule;
 import org.eurekaclinical.i2b2integration.webapp.client.ServiceClientRouterTable;
 import org.eurekaclinical.common.comm.clients.RouterTable;
-import org.eurekaclinical.i2b2.integration.client.EurekaClinicalI2b2IntegrationProxyClient;
+import org.eurekaclinical.i2b2integration.client.EurekaClinicalI2b2IntegrationProxyClient;
 import org.eurekaclinical.standardapis.props.CasEurekaClinicalProperties;
 import org.eurekaclinical.i2b2integration.webapp.props.WebappProperties;
 import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementProxyClient;

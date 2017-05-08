@@ -25,7 +25,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
 import javax.servlet.ServletContextEvent;
-import org.eurekaclinical.i2b2.integration.client.EurekaClinicalI2b2IntegrationProxyClient;
+import org.eurekaclinical.i2b2integration.client.EurekaClinicalI2b2IntegrationProxyClient;
 import org.eurekaclinical.i2b2integration.webapp.props.WebappProperties;
 import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementProxyClient;
 
