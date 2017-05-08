@@ -1,4 +1,4 @@
-package org.eurekaclinical.i2b2.integration.webapp.config;
+package org.eurekaclinical.i2b2integration.webapp.config;
 
 /*-
  * #%L
@@ -27,7 +27,7 @@ import org.eurekaclinical.common.servlet.DestroySessionServlet;
 import org.eurekaclinical.common.servlet.LogoutServlet;
 import org.eurekaclinical.common.servlet.PostMessageLoginServlet;
 import org.eurekaclinical.common.servlet.ProxyServlet;
-import org.eurekaclinical.i2b2.integration.webapp.props.WebappProperties;
+import org.eurekaclinical.i2b2integration.webapp.props.WebappProperties;
 
 /**
  * A Guice configuration module for setting up the web infrastructure and

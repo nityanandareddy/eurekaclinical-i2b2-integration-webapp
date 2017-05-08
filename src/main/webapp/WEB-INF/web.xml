@@ -23,7 +23,7 @@ see implementation details http://jersey.java.net/nonav/documentation/latest/jax
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
     <!-- THIS LISTENER CONFIGURES THE GUICE INJECTION -->
     <listener>
-        <listener-class>org.eurekaclinical.i2b2.integration.webapp.config.ContextListener</listener-class>
+        <listener-class>org.eurekaclinical.i2b2integration.webapp.config.ContextListener</listener-class>
     </listener>
     <listener>
         <listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>

@@ -1,4 +1,4 @@
-package org.eurekaclinical.i2b2.integration.webapp.servlet;
+package org.eurekaclinical.i2b2integration.webapp.servlet;
 
 /*-
  * #%L

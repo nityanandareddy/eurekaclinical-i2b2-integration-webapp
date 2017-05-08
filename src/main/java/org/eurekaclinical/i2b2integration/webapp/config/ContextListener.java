@@ -1,4 +1,4 @@
-package org.eurekaclinical.i2b2.integration.webapp.config;
+package org.eurekaclinical.i2b2integration.webapp.config;
 
 /*-
  * #%L
@@ -26,7 +26,7 @@ import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
 import javax.servlet.ServletContextEvent;
 import org.eurekaclinical.i2b2.integration.client.EurekaClinicalI2b2IntegrationProxyClient;
-import org.eurekaclinical.i2b2.integration.webapp.props.WebappProperties;
+import org.eurekaclinical.i2b2integration.webapp.props.WebappProperties;
 import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementProxyClient;
 
 /**
