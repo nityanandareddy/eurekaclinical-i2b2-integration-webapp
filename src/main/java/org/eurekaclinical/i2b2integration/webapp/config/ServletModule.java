@@ -38,14 +38,10 @@ import org.eurekaclinical.i2b2integration.webapp.props.WebappProperties;
  */
 public class ServletModule extends AbstractServletModule {
     
-    private static final String CONTAINER_PATH = "/site/*";
-
-    private static final String CONTAINER_PROTECTED_PATH = "/protected/*";
-    
     private final WebappProperties properties;
 
     public ServletModule(WebappProperties inProperties) {
-        super(inProperties, CONTAINER_PATH, CONTAINER_PROTECTED_PATH);
+        super(inProperties);
         this.properties = inProperties;
     }
     

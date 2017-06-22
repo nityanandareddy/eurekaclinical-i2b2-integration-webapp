@@ -42,7 +42,7 @@ public class ContextListener extends GuiceServletContextListener {
     private final EurekaClinicalI2b2IntegrationProxyClient i2b2IntegrationClient
             = new EurekaClinicalI2b2IntegrationProxyClient(this.properties.getServiceUrl());
     private final EurekaClinicalUserAgreementProxyClient userAgreementClient;
-    private InjectorSupport injectorSupport;
+    private Injector injector;
 
     public ContextListener() {
         String userAgreementServiceUrl = this.properties.getUserAgreementServiceUrl();
@@ -60,16 +60,20 @@ public class ContextListener extends GuiceServletContextListener {
          * Must be created here in order for the modules to initialize 
          * correctly.
          */
-        if (this.injectorSupport == null) {
-            this.injectorSupport = new InjectorSupport(
+        this.injector = new InjectorSupport(
                     new Module[]{
                         new AppModule(this.properties, this.i2b2IntegrationClient, this.userAgreementClient),
                         new ServletModule(this.properties),},
-                    this.properties);
-        }
-        return this.injectorSupport.getInjector();
+                    this.properties).getInjector();
+        return this.injector;
     }
 
+    @Override
+    public void contextInitialized(ServletContextEvent servletContextEvent) {
+        super.contextInitialized(servletContextEvent);
+        servletContextEvent.getServletContext().addListener(this.injector.getInstance(ClientSessionListener.class));
+    }
+    
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
         this.i2b2IntegrationClient.close();
