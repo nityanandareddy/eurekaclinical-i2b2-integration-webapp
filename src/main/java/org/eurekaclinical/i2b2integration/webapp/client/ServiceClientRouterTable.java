@@ -22,9 +22,9 @@ package org.eurekaclinical.i2b2integration.webapp.client;
 import com.google.inject.Inject;
 import org.eurekaclinical.common.comm.clients.Route;
 import org.eurekaclinical.common.comm.clients.RouterTable;
-import org.eurekaclinical.i2b2integration.client.EurekaClinicalI2b2IntegrationProxyClient;
+import org.eurekaclinical.i2b2integration.client.EurekaClinicalI2b2IntegrationClient;
 import org.eurekaclinical.i2b2integration.webapp.props.WebappProperties;
-import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementProxyClient;
+import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementClient;
 
 /**
  *
@@ -32,13 +32,13 @@ import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementProxyC
  */
 public class ServiceClientRouterTable implements RouterTable {
 
-    private final EurekaClinicalI2b2IntegrationProxyClient i2b2IntegrationClient;
+    private final EurekaClinicalI2b2IntegrationClient i2b2IntegrationClient;
     
     @Inject(optional=true)
-    private EurekaClinicalUserAgreementProxyClient userAgreementClient;
+    private EurekaClinicalUserAgreementClient userAgreementClient;
 
     @Inject
-    public ServiceClientRouterTable(EurekaClinicalI2b2IntegrationProxyClient inI2b2IntegrationClient, WebappProperties inProperties) {
+    public ServiceClientRouterTable(EurekaClinicalI2b2IntegrationClient inI2b2IntegrationClient, WebappProperties inProperties) {
         this.i2b2IntegrationClient = inI2b2IntegrationClient;
     }
 

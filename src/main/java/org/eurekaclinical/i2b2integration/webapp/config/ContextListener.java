@@ -25,9 +25,10 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
 import javax.servlet.ServletContextEvent;
-import org.eurekaclinical.i2b2integration.client.EurekaClinicalI2b2IntegrationProxyClient;
+import org.eurekaclinical.common.config.ClientSessionListener;
+import org.eurekaclinical.i2b2integration.client.EurekaClinicalI2b2IntegrationClient;
 import org.eurekaclinical.i2b2integration.webapp.props.WebappProperties;
-import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementProxyClient;
+import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementClient;
 
 /**
  * Loaded up on application initialization, sets up the application with Guice
@@ -39,19 +40,9 @@ import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementProxyC
 public class ContextListener extends GuiceServletContextListener {
 
     private final WebappProperties properties = new WebappProperties();
-    private final EurekaClinicalI2b2IntegrationProxyClient i2b2IntegrationClient
-            = new EurekaClinicalI2b2IntegrationProxyClient(this.properties.getServiceUrl());
-    private final EurekaClinicalUserAgreementProxyClient userAgreementClient;
     private Injector injector;
 
     public ContextListener() {
-        String userAgreementServiceUrl = this.properties.getUserAgreementServiceUrl();
-        if (userAgreementServiceUrl != null) {
-            this.userAgreementClient
-                    = new EurekaClinicalUserAgreementProxyClient(this.properties.getUserAgreementServiceUrl());
-        } else {
-            this.userAgreementClient = null;
-        }
     }
 
     @Override
@@ -62,8 +53,8 @@ public class ContextListener extends GuiceServletContextListener {
          */
         this.injector = new InjectorSupport(
                     new Module[]{
-                        new AppModule(this.properties, this.i2b2IntegrationClient, this.userAgreementClient),
-                        new ServletModule(this.properties),},
+                        new AppModule(this.properties),
+                        new ServletModule(this.properties)},
                     this.properties).getInjector();
         return this.injector;
     }
@@ -71,15 +62,8 @@ public class ContextListener extends GuiceServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         super.contextInitialized(servletContextEvent);
-        servletContextEvent.getServletContext().addListener(this.injector.getInstance(ClientSessionListener.class));
+        servletContextEvent.getServletContext().addListener(new ClientSessionListener(EurekaClinicalI2b2IntegrationClient.class));
+        servletContextEvent.getServletContext().addListener(new ClientSessionListener(EurekaClinicalUserAgreementClient.class));
     }
     
-    @Override
-    public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        this.i2b2IntegrationClient.close();
-        if (this.userAgreementClient != null) {
-            this.userAgreementClient.close();
-        }
-    }
-
 }
