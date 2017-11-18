@@ -31,8 +31,12 @@
     </issueManagement>
     
     <properties>
-        <ec-i2b2-integration-client-version>2.0-Alpha-5</ec-i2b2-integration-client-version>
-        <ec-user-agreement-client-version>2.0-Alpha-4</ec-user-agreement-client-version>
+        <ec-i2b2-integration-client-version>2.0-Alpha-6</ec-i2b2-integration-client-version>
+        <ec-user-agreement-client-version>2.0-Alpha-5</ec-user-agreement-client-version>
+        <ec-common-version>2.0-Alpha-36</ec-common-version>
+        <ec-standard-apis-version>2.0-Alpha-17</ec-standard-apis-version>
+        <eurekaclinical-i2b2-integration-service-version>1.0-Alpha-11</eurekaclinical-i2b2-integration-service-version>
+        <eurekaclinical-user-agreement-service-version>2.0-Alpha-7</eurekaclinical-user-agreement-service-version>
     </properties>
     
     <build>
@@ -64,6 +68,16 @@
             <artifactId>eurekaclinical-user-agreement-client</artifactId>
             <version>${ec-user-agreement-client-version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.eurekaclinical</groupId>
+            <artifactId>eurekaclinical-common</artifactId>
+            <version>${ec-common-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eurekaclinical</groupId>
+            <artifactId>eurekaclinical-standard-apis</artifactId>
+            <version>${ec-standard-apis-version}</version>
+        </dependency>
     </dependencies>
     <profiles>
         <profile>
@@ -71,8 +85,6 @@
             <properties>
                 <cas-mock-version>1.0</cas-mock-version>
                 <tomcat.httpsPort>8443</tomcat.httpsPort>
-                <eurekaclinical-i2b2-integration-service-version>1.0-Alpha-9</eurekaclinical-i2b2-integration-service-version>
-                <eurekaclinical-user-agreement-service-version>2.0-Alpha-5</eurekaclinical-user-agreement-service-version>
             </properties>
             <build>
                 <plugins>
@@ -211,7 +223,7 @@
                                 </webapp>
                             </webapps>
                             <addContextWarDependencies>true</addContextWarDependencies>
-                            <addWarDependenciesInClassloader>true</addWarDependenciesInClassloader>
+                            <addWarDependenciesInClassloader>false</addWarDependenciesInClassloader>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -288,6 +300,29 @@
                     </plugin>
                 </plugins>
             </build>
+            <dependencies>
+                <dependency>
+                    <groupId>org.eurekaclinical</groupId>
+                    <artifactId>cas-mock</artifactId>
+                    <version>${cas-mock-version}</version>
+                    <type>war</type>
+                    <scope>runtime</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.eurekaclinical</groupId>
+                    <artifactId>eurekaclinical-i2b2-integration-service</artifactId>
+                    <version>${eurekaclinical-i2b2-integration-service-version}</version>
+                    <type>war</type>
+                    <scope>runtime</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.eurekaclinical</groupId>
+                    <artifactId>eurekaclinical-user-agreement-service</artifactId>
+                    <version>${eurekaclinical-user-agreement-service-version}</version>
+                    <type>war</type>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
         </profile>
     </profiles>
 </project>
