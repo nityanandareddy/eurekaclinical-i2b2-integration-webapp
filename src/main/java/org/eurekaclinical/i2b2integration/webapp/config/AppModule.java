@@ -20,6 +20,7 @@ package org.eurekaclinical.i2b2integration.webapp.config;
  * #L%
  */
 import com.google.inject.AbstractModule;
+import com.google.inject.servlet.SessionScoped;
 import org.eurekaclinical.i2b2integration.webapp.client.ServiceClientRouterTable;
 import org.eurekaclinical.common.comm.clients.RouterTable;
 import org.eurekaclinical.i2b2integration.client.EurekaClinicalI2b2IntegrationClient;
@@ -47,11 +48,11 @@ public class AppModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(RouterTable.class).to(ServiceClientRouterTable.class);
+        bind(RouterTable.class).to(ServiceClientRouterTable.class).in(SessionScoped.class);
         bind(CasEurekaClinicalProperties.class).toInstance(this.properties);
-        bind(EurekaClinicalI2b2IntegrationClient.class).toProvider(this.i2b2IntegrationClientProvider);
+        bind(EurekaClinicalI2b2IntegrationClient.class).toProvider(this.i2b2IntegrationClientProvider).in(SessionScoped.class);
         if (this.userAgreementClientProvider != null) {
-            bind(EurekaClinicalUserAgreementClient.class).toProvider(this.userAgreementClientProvider);
+            bind(EurekaClinicalUserAgreementClient.class).toProvider(this.userAgreementClientProvider).in(SessionScoped.class);
         }
     }
 }

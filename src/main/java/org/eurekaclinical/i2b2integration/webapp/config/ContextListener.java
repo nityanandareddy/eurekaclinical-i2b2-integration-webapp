@@ -62,8 +62,7 @@ public class ContextListener extends GuiceServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         super.contextInitialized(servletContextEvent);
-        servletContextEvent.getServletContext().addListener(new ClientSessionListener(EurekaClinicalI2b2IntegrationClient.class));
-        servletContextEvent.getServletContext().addListener(new ClientSessionListener(EurekaClinicalUserAgreementClient.class));
+        servletContextEvent.getServletContext().addListener(new ClientSessionListener());
     }
     
 }
