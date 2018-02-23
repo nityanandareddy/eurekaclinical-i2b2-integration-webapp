@@ -25,6 +25,8 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
 import javax.servlet.ServletContextEvent;
+
+import org.eurekaclinical.common.config.ApiGatewayServletModule;
 import org.eurekaclinical.common.config.ClientSessionListener;
 import org.eurekaclinical.i2b2integration.client.EurekaClinicalI2b2IntegrationClient;
 import org.eurekaclinical.i2b2integration.webapp.props.WebappProperties;
@@ -54,7 +56,7 @@ public class ContextListener extends GuiceServletContextListener {
         this.injector = new InjectorSupport(
                     new Module[]{
                         new AppModule(this.properties),
-                        new ServletModule(this.properties)},
+                        new ApiGatewayServletModule(this.properties)},
                     this.properties).getInjector();
         return this.injector;
     }
