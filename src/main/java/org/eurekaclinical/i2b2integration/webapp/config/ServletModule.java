@@ -51,6 +51,7 @@ public class ServletModule extends AbstractServletModule {
         serve("/protected/get-session").with(PostMessageLoginServlet.class);
         serve("/logout").with(LogoutServlet.class);
         serve("/destroy-session").with(DestroySessionServlet.class);
+        serve("/i2b2").with(CustomServlet.class);
     }
 
     @Override
