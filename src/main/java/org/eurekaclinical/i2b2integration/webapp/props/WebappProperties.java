@@ -33,7 +33,7 @@ public class WebappProperties extends CasEurekaClinicalProperties {
 
     @Override
     public String getProxyCallbackServer() {
-        return getValue("	");
+        return getValue("eurekaclinical.i2b2integrationwebapp.callbackserver");
     }
 
     public String getServiceUrl() {

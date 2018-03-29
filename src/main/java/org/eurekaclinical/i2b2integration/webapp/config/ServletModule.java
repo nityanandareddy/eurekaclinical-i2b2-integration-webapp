@@ -28,6 +28,7 @@ import org.eurekaclinical.common.servlet.LogoutServlet;
 import org.eurekaclinical.common.servlet.PostMessageLoginServlet;
 import org.eurekaclinical.common.servlet.ProxyServlet;
 import org.eurekaclinical.i2b2integration.webapp.props.WebappProperties;
+import org.eurekaclinical.i2b2integration.webapp.servlets.CustomProxyServlet;
 
 /**
  * A Guice configuration module for setting up the web infrastructure and
@@ -51,7 +52,7 @@ public class ServletModule extends AbstractServletModule {
         serve("/protected/get-session").with(PostMessageLoginServlet.class);
         serve("/logout").with(LogoutServlet.class);
         serve("/destroy-session").with(DestroySessionServlet.class);
-        serve("/i2b2").with(CustomServlet.class);
+        serve("/i2b2").with(CustomProxyServlet.class);
     }
 
     @Override
