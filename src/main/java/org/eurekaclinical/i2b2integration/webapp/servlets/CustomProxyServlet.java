@@ -21,16 +21,12 @@ package org.eurekaclinical.i2b2integration.webapp.servlets;
  */
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Writer;
 import java.net.URI;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.sql.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,13 +41,13 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.commons.io.IOUtils;
 import org.eurekaclinical.common.comm.clients.ClientException;
-import org.eurekaclinical.i2b2integration.webapp.utils.RequestWrapper;
 
 import com.google.inject.Singleton;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 import java.io.BufferedReader;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 @Singleton
 public class CustomProxyServlet extends HttpServlet {
@@ -69,9 +65,20 @@ public class CustomProxyServlet extends HttpServlet {
             requestHeadersToExclude.add(header.toUpperCase());
         }
     }
+    
+    private static final Set<String> responseHeadersToExclude;
+
+    static {
+        responseHeadersToExclude = new HashSet<>();
+        for (String header : new String[]{
+            "Connection", "Keep-Alive", "Proxy-Authenticate", "Proxy-Authorization",
+            "TE", "Trailers", "Transfer-Encoding", "Upgrade", HttpHeaders.SET_COOKIE
+        }) {
+            responseHeadersToExclude.add(header.toUpperCase());
+        }
+    }
 
     public CustomProxyServlet() {
-        System.out.println("+++++++++++I AM INITIALIZED++++++++++");
     }
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException
@@ -85,7 +92,6 @@ public class CustomProxyServlet extends HttpServlet {
         try {
 
             String xml = extractXml(request);
-            System.out.println("XML is " + xml);
             String pmUrl = extractProxyAddress(xml);
             if (pmUrl != null) {
                 URL url = new URL(pmUrl);
@@ -93,9 +99,7 @@ public class CustomProxyServlet extends HttpServlet {
                 MultivaluedMap<String, String> requestHeaders = extractRequestHeaders(request);
                 try {
                     ClientResponse clientResponse = client.proxyPost(xml, null, requestHeaders);
-                    System.out.println("proxyResponse:" + clientResponse.toString());
-                    int clientResponseStatus = clientResponse.getStatus();
-                    System.out.println("clientResponseStatus" + clientResponseStatus);
+                    response.setStatus(clientResponse.getStatus());
                     copyResponseHeaders(clientResponse.getHeaders(), request.getServletPath(), baseUrl(request.getContextPath(), request).toString(), response);
                     copyStream(clientResponse.getEntityInputStream(), response.getWriter());
                 } catch (ClientException e) {
@@ -109,7 +113,6 @@ public class CustomProxyServlet extends HttpServlet {
         } catch (IOException | URISyntaxException e) {
             throw new ServletException(e);
         }
-        System.out.println("request has been forwarded");
     }
 
     /**
@@ -123,17 +126,14 @@ public class CustomProxyServlet extends HttpServlet {
         try {
 			BufferedReader reader = new BufferedReader(request.getReader());
 			xml =  reader.lines().collect(Collectors.joining());
-		}catch (IOException e) 
-        {
+		}catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        System.out.println("++++xml++++"+xml);
         return xml;
     }
 
     private static MultivaluedMap<String, String> extractRequestHeaders(HttpServletRequest servletRequest) {
-
         MultivaluedMap<String, String> headers = new MultivaluedMapImpl();
         for (Enumeration<String> enm = servletRequest.getHeaderNames(); enm.hasMoreElements();) {
             String headerName = enm.nextElement();
@@ -165,9 +165,7 @@ public class CustomProxyServlet extends HttpServlet {
     }
 
     private static URI baseUrl(String contextPath, HttpServletRequest request) {
-    	String url= request.getRequestURL().toString();
-    	System.out.println("++url++:"+url);
-        return URI.create(url).resolve(contextPath);
+        return URI.create(request.getRequestURL().toString()).resolve(contextPath);
     }
 
     private static void copyResponseHeaders(
@@ -177,64 +175,28 @@ public class CustomProxyServlet extends HttpServlet {
             HttpServletResponse response) {
     		HashMap<String, String> headersMap = new HashMap<String, String>();
         if (headers != null) {
-        	System.out.println("++header are not null++");
             for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
                 String key = entry.getKey();
                 for (String val : entry.getValue()) {
-                    /*  if ("Location".equals(key.toUpperCase())) {
-                        	System.out.println("inside location condition");
-                        	System.out.println("key:"+key+" value:"+replacementPathAndClient.revertPath(proxyResourceUrl));
-                            response.addHeader(key, replacementPathAndClient.revertPath(proxyResourceUrl));
-                        }*/
-                    System.out.println("key1:" + key + " value:" + val);
-                    headersMap.put(key, val);
-                    //response.addHeader(key, val);
-                    
-                   /* ++header are not null++
-                    key1:Connection value:keep-alive
-                    key1:X-Powered-By value:Undertow/1
-                    key1:Server value:WildFly/10
-                    key1:Transfer-Encoding value:chunked
-                    key1:Content-Type value:text/xml;charset=UTF-8
-                    key1:Date value:Wed, 18 Apr 2018 19:15:35 GMT*/
+                    if (!responseHeadersToExclude.contains(key.toUpperCase())) {
+                        response.addHeader(key, val);
+                    }
                 }
             }
-            	response.setContentType(headersMap.get("Content-Type"));
-            	System.out.println("content type"+headersMap.get("Content-Type"));
-        }
-        else
-        {
-        	System.out.println("++header are null++");
         }
     }
 
     private static String copyStream(InputStream input, Writer output) throws IOException {
-       /* byte[] buffer = new byte[1024 * 4];
-        long count = 0;
-        int n = 0;
-        while (-1 != (n = input.read(buffer))) {
-            output.write(buffer, 0, n);
-            count += n;
-        }
-        if (count > Integer.MAX_VALUE) {
-            return -1;
-        }
-        System.out.println("+count+"+count);
-        return (int) count;*/
-        
         String result = "";
         try {
         	result = IOUtils.toString(input, StandardCharsets.UTF_8);
         	output.write(result);
-		}catch (IOException e) 
-        {
+		}catch (IOException e) {
 			e.printStackTrace();
 		}
-        System.out.println("++++result++++"+result);
         return result;
     }
 
-    
     private static String extractProxyAddress(String xml) {
         String proxyURL = null;
         if (xml != null) {
